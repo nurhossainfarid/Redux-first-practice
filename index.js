@@ -1,60 +1,75 @@
-// get store from redux store
+// store.dispatch(incrementCount());
+// store.dispatch(incrementCount());
+// store.dispatch(incrementCount());
+// store.dispatch(decrementCount());
+
+
+/* ------------------------------------- Follow those step for creating redux ------------------------------ */
+// 1. State: count = 0
+// 2. Action: Increment, Decrement, Reset
+// 3. Reducer: Written logic for Increment, Decrement, Reset
+// 4. Store
+
+
 const { createStore } = require("redux");
 
-// Defining Constant
+// Constant Declare
 const INCREMENT = "INCREMENT";
 const DECREMENT = "DECREMENT";
-const ADD_USER = "ADD_USER";
+const RESET = "RESET";
+const INCREMENT_BY_VALUE = "INCREMENT_BY_VALUE";
 
-
-// State
-const initialCountState = {
+/* ------------------------------------------------ State ---------------------------------------------------- */
+const initialState = {
     count: 0,
 };
 
-const initialUsersState = {
-    users: [
-        {
-            name: "Nur Hossain Farid",
-        }
-    ]
-};
-
-/* ------------------------------------------------ Action ------------------------------------------------ */
-// Action is an object. That have 2 important properties. 1) Type and 2) Playload(That is transform our data)
-const incrementCount = () => {
+/* --------------------------------------------- Action ----------------------------------------------------- */
+const incrementCounterAction = () => {
     return {
         type: INCREMENT,
-    };
-};
-const decrementCount = () => {
+    }
+}
+const decrementCounterAction = () => {
     return {
         type: DECREMENT,
-    };
-};
-
-const add_USER = () => {
+    }
+}
+const resetCounterAction = () => {
     return {
-        type: ADD_USER,
-        payload: {name: "Ahsan"},
-    };
-};
+        type: RESET,
+    }
+}
 
+const incrementCounterByValue = (value) => {
+    return {
+        type: INCREMENT_BY_VALUE,
+        payload: value,
+    }
+}
 
-/* ---------------------------------------- Create Reducer for counter ----------------------------------- */
-// Reducer is pure function where function take input and gives output based on input
-
-const counterReducer = (state = initialCountState, action) => {
+/* --------------------------------------------- Reducer -------------------------------------------------- */
+const counterReducer = (state = initialState, action) => {
     switch (action.type) {
         case INCREMENT:
             return {
                 ...state,
-                count : state.count + 1,
+                count: state.count + 1,
             }
         case DECREMENT:
             return {
                 ...state,
                 count: state.count - 1,
+            }
+        case RESET:
+            return {
+                ...state,
+                count: 0,
+            }
+        case INCREMENT_BY_VALUE:
+            return {
+                ...state,
+                count: state.count + action.payload,
             }
     
         default:
@@ -62,14 +77,19 @@ const counterReducer = (state = initialCountState, action) => {
     }
 }
 
-/* ----------------------------------------- Create store for counter -------------------------------------- */
+/* ---------------------------------------------- Store ----------------------------------------------------- */
 const store = createStore(counterReducer);
 
 store.subscribe(() => {
     console.log(store.getState());
 })
 
-store.dispatch(incrementCount());
-store.dispatch(incrementCount());
-store.dispatch(incrementCount());
-store.dispatch(decrementCount());
+// store.dispatch(incrementCounterAction());
+// store.dispatch(incrementCounterAction());
+// store.dispatch(incrementCounterAction());
+// store.dispatch(incrementCounterAction());
+// store.dispatch(decrementCounterAction());
+// store.dispatch(decrementCounterAction());
+// store.dispatch(resetCounterAction());
+store.dispatch(incrementCounterByValue(5));
+store.dispatch(incrementCounterByValue(10));
