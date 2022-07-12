@@ -1,121 +1,114 @@
-// store.dispatch(incrementCount());
-// store.dispatch(incrementCount());
-// store.dispatch(incrementCount());
-// store.dispatch(decrementCount());
+/* -------------------------------------- Multiple Redux ---------------------------------------------------- */
+// 1. Products
+// 2. comments
+
+const { createStore, combineReducers} = require("redux");
+
+/* ------------------------------------------ Constant Declaration ---------------------------------------- */
+// product const
+const GET_PRODUCT = "GET_PRODUCT";
+const ADD_PRODUCT = "ADD_PRODUCT";
+// comment const
+const GET_COMMENT = "GET_COMMENT";
+const ADD_COMMENT = "ADD_COMMENT";
 
 
-/* ------------------------------------- Follow those step for creating redux ------------------------------ */
-// 1. State: count = 0
-// 2. Action: Increment, Decrement, Reset
-// 3. Reducer: Written logic for Increment, Decrement, Reset
-// 4. Store
+/* ------------------------------------------ Initial State ---------------------------------------------- */
+// product state
+const initialProductState = {
+    products: ["Milk", "Mango"],
+    numberOfProducts: 2,
+}
+// comment state
+const initialCommentState = {
+    comments: ["You are nice person", "You are Bad Boy"],
+    numberOfComments: 2,
+}
 
-
-const { createStore } = require("redux");
-
-// Constant Declare
-const INCREMENT = "INCREMENT";
-const DECREMENT = "DECREMENT";
-const RESET = "RESET";
-const INCREMENT_BY_VALUE = "INCREMENT_BY_VALUE";
-const ADD_USERS = "ADD_USERS";
-
-/* ------------------------------------------------ State ---------------------------------------------------- */
-const initialState = {
-    users: ["Nur"],
-    count: 0,
-};
-
-/* --------------------------------------------- Action ----------------------------------------------------- */
- const incrementCounterAction = () => {
-     return {
-         type: INCREMENT,
-     }
- }
- const decrementCounterAction = () => {
-     return {
-         type: DECREMENT,
-     }
- }
- const resetCounterAction = () => {
-     return {
-         type: RESET,
-     }
- }
- const incrementCounterByValue = (value) => {
-     return {
-         type: INCREMENT_BY_VALUE,
-         payload: value,
-     }
- }
-
-const addUsers = (user) => {
+/* ----------------------------------------- Action ---------------------------------------------------- */
+// product action
+const getProduct = () => {
     return {
-        type: ADD_USERS,
-        payload: user,
+        type: GET_PRODUCT,
+    }
+}
+const addProduct = (product) => {
+    return {
+        type: ADD_PRODUCT,
+        payload: product,
     }
 }
 
-/* --------------------------------------------- Reducer -------------------------------------------------- */
- const counterReducer = (state = initialState, action) => {
-     switch (action.type) {
-         case INCREMENT:
-             return {
-                 ...state,
-                 count: state.count + 1,
-             }
-         case DECREMENT:
-             return {
-                 ...state,
-                 count: state.count - 1,
-             }
-         case RESET:
-             return {
-                 ...state,
-                 count: 0,
-             }
-         case INCREMENT_BY_VALUE:
-             return {
-                 ...state,
-                 count: state.count + action.payload,
-             }  
-         default:
-             state;
-     }
- }
+// comment action
+const getComment = () => {
+    return {
+        type: GET_COMMENT,
+    }
+}
+const addComment = (comment) => {
+    return {
+        type: ADD_COMMENT,
+        payload: comment,
+    }
+}
 
-const usersReducer = (state= initialState, action) => {
+/* ----------------------------------------------- Reducer ----------------------------------------------- */
+// product Reducer
+const productReducer = (state = initialProductState, action) => {
     switch (action.type) {
-        case ADD_USERS:
+        case GET_PRODUCT:
             return {
-                users: [...state.users, action.payload],
-                count: state.count + 1,
+                ...state,
             }
-    
+        case ADD_PRODUCT:
+            return {
+                products: [...state.products, action.payload],
+                numberOfProducts: state.numberOfProducts + 1,
+            }
         default:
-            state;
+            return state
+}
+}
+
+// comment Reducer
+const commentReducer = (state = initialCommentState, action) => {
+    switch (action.type) {
+        case GET_COMMENT:
+            return {
+                ...state,
+            }
+        case ADD_COMMENT:
+            return {
+                comments: [...state.comments, action.payload],
+                numberOfComments: state.numberOfComments + 1,
+            }
+        default:
+            return state
     }
 }
 
-/* ---------------------------------------------- Store ----------------------------------------------------- */
-const store = createStore(counterReducer);
+const rootReduer = combineReducers({
+    productR: productReducer,
+    commentR: commentReducer,
+  });
+  
 
+
+
+/* -------------------------------------------- Store -------------------------------------------- */
+const store = createStore(rootReduer);
+  
 store.subscribe(() => {
-    console.log(store.getState());
-})
+  console.log(store.getState());
+});
 
-const usersStore = createStore(usersReducer);
-usersStore.subscribe(() => {
-    console.log(usersStore.getState());
-})
 
-store.dispatch(incrementCounterAction());
-store.dispatch(incrementCounterAction());
-store.dispatch(incrementCounterAction());
-store.dispatch(incrementCounterAction());
-store.dispatch(decrementCounterAction());
-store.dispatch(decrementCounterAction());
-store.dispatch(resetCounterAction());
-store.dispatch(incrementCounterByValue(5));
-store.dispatch(incrementCounterByValue(10));
-usersStore.dispatch(addUsers("Hossain"));
+store.dispatch(getProduct());
+store.dispatch(addProduct("Banana"));
+
+store.dispatch(getComment());
+store.dispatch(addComment("You are Hacker"));
+store.dispatch(addComment("You are Lover boy"));
+
+
+
